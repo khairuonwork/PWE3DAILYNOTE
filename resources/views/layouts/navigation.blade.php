@@ -21,6 +21,11 @@
                         {{ __('Notes') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('charts')" :active="request()->routeIs('notes/charts')">
+                        {{ __('Charts') }}
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->
