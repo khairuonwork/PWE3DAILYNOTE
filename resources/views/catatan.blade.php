@@ -19,7 +19,7 @@
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
                     
                     <!-- Form Section -->   
-                    <form action="{{ route('notes') }}" method="POST" class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
+                    <form action="{{ route('notes.store') }}" method="POST" class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
                         @csrf
                         <div>
                             <input type="text" name="title" class="form-control border-gray-300 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" placeholder="Title" required>
