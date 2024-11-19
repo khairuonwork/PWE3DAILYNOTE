@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" href="/notepad.png" type="image/x-icon">
+    <link rel="icon" href="/notepad.png" type="image/x-icon">
     <title>Charts</title>
 </head>
 <body>
@@ -19,7 +21,6 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
                     <div class="flex justify-center">
-                        <!-- Explicitly set the width and height -->
                         <canvas id="completedChart" width="400" height="400"></canvas>
                     </div>
                 </div>
@@ -30,8 +31,17 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
                     <div class="flex justify-center">
-                        <!-- Explicitly set the width and height -->
                         <canvas id="progressChart" width="400" height="400"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
+                    <div class="flex justify-center">
+                        <canvas id="pendingChart" width="400" height="400"></canvas>
                     </div>
                 </div>
             </div>
@@ -42,6 +52,7 @@
         // Data for the chart
         const completedCount = @json($chartcompleted); // Count of 'Completed'
         const progressCount = @json($chartprogress); // Count of 'Progress'
+        const pendingCount = @json($chartpending); // Count of 'Pending'
         
         // Create the completed chart
         const completedChartCtx = document.getElementById('completedChart').getContext('2d');
@@ -77,6 +88,31 @@
                 labels: ['Progress'], // Single label for the pie chart
                 datasets: [{
                     label: 'Number of Progress Tasks',
+                    data: [progressCount], // The correct count for progress
+                    backgroundColor: ['white'],
+                    borderColor: ['rgba(75, 192, 192, 1)'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: false, // Disable responsiveness to control size
+                maintainAspectRatio: true, // Keep 1:1 aspect ratio
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                }
+            }
+        });
+        //Pending Chart
+        const pendingChartCtx = document.getElementById('pendingChart').getContext('2d');
+        new Chart(pendingChartCtx, {
+            type: 'line',
+            data: {
+                labels: ['Progress'], // Single label for the pie chart
+                datasets: [{
+                    label: 'Number of Pending Tasks',
                     data: [progressCount], // The correct count for progress
                     backgroundColor: ['white'],
                     borderColor: ['rgba(75, 192, 192, 1)'],

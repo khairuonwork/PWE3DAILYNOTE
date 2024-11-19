@@ -10,6 +10,7 @@ class ChartController extends Controller
     {
         $chartcompleted = Catatan::where('status', 'Completed')->count();
         $chartprogress = Catatan::where('status', 'Progress')->count();
-        return view('charts', compact('chartcompleted', 'chartprogress'));
+        $chartpending = Catatan::where('status', 'Pending')->count();
+        return view('charts', compact('chartcompleted', 'chartprogress', 'chartpending'));
     }
 }
