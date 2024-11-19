@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Notes</title>
+    <link rel="icon" href="/notepad.png" type="image/x-icon">
 </head>
 <body>
     <x-app-layout>
@@ -54,9 +55,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Display All Notes (if $notes is available) -->
                                 @if (isset($notes))
-                                    @foreach ($notes as $note)
+                                    @php
+                                        // Sort notes by status
+                                        $sortedNotes = collect($notes)->sortBy(function ($note) {
+                                            return ['Pending' => 1, 'Progress' => 2, 'Completed' => 3][$note->status] ?? 4; //Default NULL
+                                        });
+                                    @endphp
+                                    @foreach ($sortedNotes as $note)
                                     <tr>
                                         <td class="px-4 py-2 border">{{ $note->title }}</td>
                                         <td class="px-4 py-2 border">{{ $note->notes }}</td>
@@ -66,7 +72,6 @@
                                             <a href="{{ route('notes.edit', $note->id) }}" class="text-blue-500 hover:text-blue-700">
                                                 Edit
                                             </a>
-                                
                                             <!-- Delete Button -->
                                             <form action="{{ route('notes.destroy', $note->id) }}" method="POST" class="inline-block">
                                                 @csrf
@@ -78,36 +83,14 @@
                                         </td>
                                     </tr>
                                     @endforeach
-                                <!-- Display Single Note for Editing (if $note is available) -->
-                                @elseif (isset($note))
+                                @else
                                     <tr>
-                                        <td colspan="4" class="px-4 py-2 border">
-                                            <form action="{{ route('notes.update', $note->id) }}" method="POST" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                                @csrf
-                                                @method('PUT')
-                                                <div>
-                                                    <input type="text" name="title" class="form-control border-gray-300 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" value="{{ $note->title }}" required>
-                                                </div>
-                                                <div>
-                                                    <input type="text" name="notes" class="form-control border-gray-300 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" value="{{ $note->notes }}" required>
-                                                </div>
-                                                <div>
-                                                    <select name="status" class="form-control border-gray-300 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" required>
-                                                        <option value="Pending" {{ $note->status == 'Pending' ? 'selected' : '' }}>Pending</option>
-                                                        <option value="Progress" {{ $note->status == 'Progress' ? 'selected' : '' }}>Progress</option>
-                                                        <option value="Completed" {{ $note->status == 'Completed' ? 'selected' : '' }}>Completed</option>
-                                                    </select>
-                                                </div>
-                                                <div class="sm:col-span-3 flex justify-end">
-                                                    <button type="submit" class="btn btn-primary px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-                                                        Update Note
-                                                    </button>
-                                                </div>
-                                            </form>
+                                        <td colspan="4" class="px-4 py-2 text-center text-gray-500">
+                                            No notes available.
                                         </td>
                                     </tr>
-                                @endif                                                  
-                            </tbody>                                                
+                                @endif
+                            </tbody>
                         </table>
                     </div>
                 </div>
