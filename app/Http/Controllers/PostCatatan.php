@@ -54,7 +54,8 @@ class PostCatatan extends Controller
     public function edit($id)
     {
         $note = Catatan::findOrFail($id);
-        return view('catatan', compact('note'));
+        $notes = Catatan::where('user_id', Auth::id())->get();
+        return view('catatan', compact('note', 'notes'));
     }
 
     /**

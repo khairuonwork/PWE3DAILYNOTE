@@ -20,25 +20,42 @@
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
                     
                     <!-- Form Section -->   
-                    <form action="{{ route('notes.store') }}" method="POST" class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
+                    <form action="{{ isset($note) ? route('notes.update', $note->id) : route('notes.store') }}" 
+                          method="POST" 
+                          class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
                         @csrf
+                        @if (isset($note))
+                            @method('PUT')
+                        @endif
                         <div>
-                            <input type="text" name="title" class="form-control border-gray-300 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" placeholder="Title" required>
+                            <input type="text" 
+                                   name="title" 
+                                   class="form-control border-gray-300 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" 
+                                   placeholder="Title" 
+                                   value="{{ $note->title ?? '' }}" 
+                                   required>
                         </div>
                         <div>
-                            <input type="text" name="notes" class="form-control border-gray-300 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" placeholder="Notes" required>
+                            <input type="text" 
+                                   name="notes" 
+                                   class="form-control border-gray-300 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" 
+                                   placeholder="Notes" 
+                                   value="{{ $note->notes ?? '' }}" 
+                                   required>
                         </div>
                         <div>
-                            <select name="status" class="form-control border-gray-300 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" required>
+                            <select name="status" 
+                                    class="form-control border-gray-300 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" 
+                                    required>
                                 <option value="">Select Status</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Progress">Progress</option>
-                                <option value="Completed">Completed</option>
+                                <option value="Pending" {{ isset($note) && $note->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                <option value="Progress" {{ isset($note) && $note->status == 'Progress' ? 'selected' : '' }}>Progress</option>
+                                <option value="Completed" {{ isset($note) && $note->status == 'Completed' ? 'selected' : '' }}>Completed</option>
                             </select>
                         </div>
                         <div class="sm:col-span-1 flex justify-end">
                             <button type="submit" class="btn btn-primary px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-                                Add
+                                {{ isset($note) ? 'Update' : 'Add' }}
                             </button>
                         </div>
                     </form>
@@ -55,34 +72,28 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (isset($notes))
-                                    @php
-                                        // Sort notes by status
-                                        $sortedNotes = collect($notes)->sortBy(function ($note) {
-                                            return ['Pending' => 1, 'Progress' => 2, 'Completed' => 3][$note->status] ?? 4; //Default NULL
-                                        });
-                                    @endphp
-                                    @foreach ($sortedNotes as $note)
-                                    <tr>
-                                        <td class="px-4 py-2 border">{{ $note->title }}</td>
-                                        <td class="px-4 py-2 border">{{ $note->notes }}</td>
-                                        <td class="px-4 py-2 border">{{ $note->status }}</td>
-                                        <td class="px-4 py-2 border text-center">
-                                            <!-- Edit Button -->
-                                            <a href="{{ route('notes.edit', $note->id) }}" class="text-blue-500 hover:text-blue-700">
-                                                Edit
-                                            </a>
-                                            <!-- Delete Button -->
-                                            <form action="{{ route('notes.destroy', $note->id) }}" method="POST" class="inline-block">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="text-red-500 hover:text-red-700 ml-2">
-                                                    Delete
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    @endforeach
+                                @if ($notes->isNotEmpty())
+                                    @foreach ($notes->sortBy(fn($note) => ['Pending' => 1, 'Progress' => 2, 'Completed' => 3][$note->status]) as $note)
+                                        <tr>
+                                            <td class="px-4 py-2 border">{{ $note->title }}</td>
+                                            <td class="px-4 py-2 border">{{ $note->notes }}</td>
+                                            <td class="px-4 py-2 border">{{ $note->status }}</td>
+                                            <td class="px-4 py-2 border text-center">
+                                                <!-- Edit Button -->
+                                                <a href="{{ route('notes.edit', $note->id) }}" class="text-blue-500 hover:text-blue-700">
+                                                    Edit
+                                                </a>
+                                                <!-- Delete Button -->
+                                                <form action="{{ route('notes.destroy', $note->id) }}" method="POST" class="inline-block">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="text-red-500 hover:text-red-700 ml-2">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach 
                                 @else
                                     <tr>
                                         <td colspan="4" class="px-4 py-2 text-center text-gray-500">

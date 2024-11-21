@@ -15,8 +15,6 @@
     })->middleware(['auth', 'verified'])->name('dashboard');
     //Notes
     Route::get('notes/list', [PostCatatan::class, 'index'])->middleware(['auth', 'verified'])->name('notes');
-
-
     // Image Library
     Route::get('notes/library', [PostLibrary::class, 'index'])->middleware(['auth', 'verified'])->name('library');
 
@@ -29,11 +27,16 @@
 
     //Charts
     Route::get('notes/charts', [ChartController::class, 'charts'])->middleware(['auth', 'verified'])->name('charts');
-
+    
     // Controller Resource
+    //get->index
+    //get->create
+    //post->store
+    //get->show
+    //get->edit
+    //put->update
+    //delete->destroy
     Route::resource('notes', PostCatatan::class);
-
-
     Route::resource('library', PostLibrary::class);
 
 
