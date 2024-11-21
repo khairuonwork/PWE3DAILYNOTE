@@ -29,8 +29,8 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('libraries')" :active="request()->routeIs('notes/library')">
-                        {{ __('Library') }}
+                    <x-nav-link :href="route('library')" :active="request()->routeIs('notes/library')">
+                        {{ __('Images') }}
                     </x-nav-link>
                 </div>
             </div>

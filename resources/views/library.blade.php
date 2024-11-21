@@ -10,19 +10,19 @@
     <x-app-layout>
         <x-slot name="header">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Library Management') }}
+                {{ __('Images Library') }}
             </h2>
         </x-slot>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    
-                    <!-- Form Section -->   
-                    <form 
-                        action="{{ isset($libraryItem) ? route('library.update', $libraryItem->images_id) : route('library.store') }}" 
-                        method="POST" 
-                        enctype="multipart/form-data" 
+
+                    <!-- Form Section -->
+                    <form
+                        action="{{ isset($libraryItem) ? route('library.update', $libraryItem->images_id) : route('library.store') }}"
+                        method="POST"
+                        enctype="multipart/form-data"
                         class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6"
                     >
                         @csrf
@@ -32,32 +32,32 @@
 
                         <!-- Title -->
                         <div>
-                            <input 
-                                type="text" 
-                                name="title" 
-                                value="{{ old('title', $libraryItem->title ?? '') }}" 
-                                class="form-control border-gray-300 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" 
+                            <input
+                                type="text"
+                                name="title"
+                                value="{{ old('title', $libraryItem->title ?? '') }}"
+                                class="form-control border-gray-300 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full"
                                 placeholder="Title" required
                             >
                         </div>
 
                         <!-- Notes -->
                         <div>
-                            <input 
-                                type="text" 
-                                name="notes" 
-                                value="{{ old('notes', $libraryItem->notes ?? '') }}" 
-                                class="form-control border-gray-300 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" 
+                            <input
+                                type="text"
+                                name="notes"
+                                value="{{ old('notes', $libraryItem->notes ?? '') }}"
+                                class="form-control border-gray-300 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full"
                                 placeholder="Notes" required
                             >
                         </div>
 
                         <!-- Image -->
                         <div>
-                            <input 
-                                type="file" 
-                                name="image" 
-                                class="form-control border-gray-300 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" 
+                            <input
+                                type="file"
+                                name="image"
+                                class="form-control border-gray-300 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full"
                                 {{ isset($libraryItem) ? '' : 'required' }}
                             >
                             @if(isset($libraryItem) && $libraryItem->images)

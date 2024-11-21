@@ -6,8 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="icon" href="/notepad.png" type="image/x-icon">
-    <link rel="icon" href="/notepad.png" type="image/x-icon">
     <title>Charts</title>
+    <style>
+        .chart-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+        }
+    </style>
 </head>
 <body>
     <x-app-layout>
@@ -20,28 +27,15 @@
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <div class="flex justify-center">
-                        <canvas id="completedChart" width="400" height="400"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <div class="flex justify-center">
-                        <canvas id="progressChart" width="400" height="400"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    <div class="chart-row">
+                        <!-- Chart 1 -->
+                        <canvas id="completedChart" width="300" height="300"></canvas>
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <div class="flex justify-center">
-                        <canvas id="pendingChart" width="400" height="400"></canvas>
+                        <!-- Chart 2 -->
+                        <canvas id="progressChart" width="300" height="300"></canvas>
+
+                        <!-- Chart 3 -->
+                        <canvas id="pendingChart" width="300" height="300"></canvas>
                     </div>
                 </div>
             </div>
@@ -49,28 +43,38 @@
     </x-app-layout>
 
     <script>
-        // Data for the chart
+        // Data for the charts
         const completedCount = @json($chartcompleted); // Count of 'Completed'
         const progressCount = @json($chartprogress); // Count of 'Progress'
         const pendingCount = @json($chartpending); // Count of 'Pending'
-        
+
+        // Common y-axis configuration
+        const yAxisConfig = {
+            min: 0,
+            max: 10,
+            stepSize: 1,
+        };
+
         // Create the completed chart
         const completedChartCtx = document.getElementById('completedChart').getContext('2d');
         new Chart(completedChartCtx, {
             type: 'line',
             data: {
-                labels: ['Completed'], // Single label for the pie chart
+                labels: ['Completed'],
                 datasets: [{
                     label: 'Number of Completed Tasks',
-                    data: [completedCount], // The count from the database
-                    backgroundColor: ['white'],
+                    data: [completedCount],
+                    backgroundColor: ['rgba(75, 192, 192, 0.2)'],
                     borderColor: ['rgba(75, 192, 192, 1)'],
                     borderWidth: 1
                 }]
             },
             options: {
-                responsive: false, // Disable responsiveness to control size
-                maintainAspectRatio: true, // Keep 1:1 aspect ratio
+                responsive: false,
+                maintainAspectRatio: true,
+                scales: {
+                    y: yAxisConfig
+                },
                 plugins: {
                     legend: {
                         display: true,
@@ -85,18 +89,21 @@
         new Chart(progressChartCtx, {
             type: 'line',
             data: {
-                labels: ['Progress'], // Single label for the pie chart
+                labels: ['Progress'],
                 datasets: [{
                     label: 'Number of Progress Tasks',
-                    data: [progressCount], // The correct count for progress
-                    backgroundColor: ['white'],
-                    borderColor: ['rgba(75, 192, 192, 1)'],
+                    data: [progressCount],
+                    backgroundColor: ['rgba(192, 192, 75, 0.2)'],
+                    borderColor: ['rgba(192, 192, 75, 1)'],
                     borderWidth: 1
                 }]
             },
             options: {
-                responsive: false, // Disable responsiveness to control size
-                maintainAspectRatio: true, // Keep 1:1 aspect ratio
+                responsive: false,
+                maintainAspectRatio: true,
+                scales: {
+                    y: yAxisConfig
+                },
                 plugins: {
                     legend: {
                         display: true,
@@ -105,23 +112,27 @@
                 }
             }
         });
-        //Pending Chart
+
+        // Create the pending chart
         const pendingChartCtx = document.getElementById('pendingChart').getContext('2d');
         new Chart(pendingChartCtx, {
             type: 'line',
             data: {
-                labels: ['Progress'], // Single label for the pie chart
+                labels: ['Pending'],
                 datasets: [{
                     label: 'Number of Pending Tasks',
-                    data: [progressCount], // The correct count for progress
-                    backgroundColor: ['white'],
-                    borderColor: ['rgba(75, 192, 192, 1)'],
+                    data: [pendingCount],
+                    backgroundColor: ['rgba(192, 75, 75, 0.2)'],
+                    borderColor: ['rgba(192, 75, 75, 1)'],
                     borderWidth: 1
                 }]
             },
             options: {
-                responsive: false, // Disable responsiveness to control size
-                maintainAspectRatio: true, // Keep 1:1 aspect ratio
+                responsive: false,
+                maintainAspectRatio: true,
+                scales: {
+                    y: yAxisConfig
+                },
                 plugins: {
                     legend: {
                         display: true,
