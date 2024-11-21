@@ -14,7 +14,7 @@ class PostLibrary extends Controller
      */
     public function index()
     {
-        // Fetch all library items for the authenticated user
+        // Fetch
         $libraries = Library::where('user_id', Auth::id())->get();
         return view('library', compact('libraries'));
     }
@@ -30,7 +30,7 @@ class PostLibrary extends Controller
             'image' => ['required', 'image'],
         ]);
 
-        // Store the image in the 'library' folder and save the item
+        // Store
         $imagePath = $request->file('image')->store('library', 'public');
 
         Library::create([
@@ -67,19 +67,19 @@ class PostLibrary extends Controller
 
         $libraryItem = Library::where('user_id', Auth::id())->findOrFail($id);
 
-        // Update image if a new one is uploaded
+        // Update image
         if ($request->hasFile('image')) {
             // Delete the old image
             if ($libraryItem->images) {
                 Storage::disk('public')->delete($libraryItem->images);
             }
 
-            // Store the new image
+            // Store
             $imagePath = $request->file('image')->store('library', 'public');
             $libraryItem->images = $imagePath;
         }
 
-        // Update other fields
+        // Update
         $libraryItem->update([
             'title' => $request->title,
             'notes' => $request->notes,
@@ -95,7 +95,7 @@ class PostLibrary extends Controller
     {
         $libraryItem = Library::where('user_id', Auth::id())->findOrFail($id);
 
-        // Delete the image if it exists
+        // Delete
         if ($libraryItem->images) {
             Storage::disk('public')->delete($libraryItem->images);
         }
